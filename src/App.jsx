@@ -173,14 +173,10 @@ function App() {
         <div className="chatbot-container">
           <Chatbot />
         </div>
-      )}     
+      )}
 
-      <div
-        className="chatbot-icon"
-        onClick={() => setShowChatbot(!showChatbot)}
-      >
-        {" "}
-        🤖{" "}
+      <div className="chatbot-icon" onClick={() => setShowChatbot(!showChatbot)}>
+        {" "} 🤖{" "}
       </div>
     </>
   );

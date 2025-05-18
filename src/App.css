@@ -239,9 +239,9 @@ body, html {
   position: fixed;
   bottom: 80px;
   right: 20px;
-  width: 300px;
-  max-height: 400px;
-  background: white;
+  width: 360px;
+  max-height: 800px;
+  background: rgb(0, 0, 0);
   border-radius: 10px;
   box-shadow: 0 0 15px rgba(0,0,0,0.3);
   z-index: 1001;

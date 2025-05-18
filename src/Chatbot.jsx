@@ -1,33 +1,55 @@
 import React, { useState } from "react";
 import { fetchGeminiResponse } from "./geminiApi";
+import "./Chatbot.css";
 
 const Chatbot = () => {
   const [input, setInput] = useState("");
-  const [reply, setReply] = useState("");
+  const [messages, setMessages] = useState([
+    { text: "Hi! I'm Gemini. Ask me anything.", sender: "bot" },
+  ]);
 
   const handleSubmit = async () => {
-    const result = await fetchGeminiResponse(input);
-    setReply(result);
+    if (!input.trim()) return;
+
+    const userMessage = { text: input, sender: "user" };
+    setMessages((prev) => [...prev, userMessage]);
+    setInput("");
+
+    try {
+      const result = await fetchGeminiResponse(input);
+      const botMessage = { text: result, sender: "bot" };
+      setMessages((prev) => [...prev, botMessage]);
+    } catch (error) {
+      const errorMessage = {
+        text: "Error getting response. Try again.",
+        sender: "bot",
+      };
+      setMessages((prev) => [...prev, errorMessage]);
+    }
   };
 
   return (
-    <div className="p-4">
-      <h1>Gemini AI Chat</h1>
-      <textarea
-        rows="4"
-        value={input}
-        onChange={(e) => setInput(e.target.value)}
-        placeholder="Ask something..."
-        className="w-full p-2 border rounded"
-      />
-      <button onClick={handleSubmit} className="mt-2 px-4 py-2 bg-blue-600 text-white rounded">
-        Send
-      </button>
-      {reply && (
-        <div className="mt-4 p-3 bg-gray-100 border rounded">
-          <strong>Gemini:</strong> {reply}
-        </div>
-      )}
+    <div className="chat-container">
+      <div className="chat-header">Gemini AI</div>
+
+      <div className="chat-body">
+        {messages.map((msg, idx) => (
+          <div key={idx} className={`chat-message ${msg.sender}`}>
+            <div className="chat-bubble">{msg.text}</div>
+          </div>
+        ))}
+      </div>
+
+      <div className="chat-input">
+        <textarea
+          rows="1"
+          value={input}
+          onChange={(e) => setInput(e.target.value)}
+          placeholder="Send a message..."
+          onKeyDown={(e) => e.key === "Enter" && !e.shiftKey && handleSubmit()}
+        />
+        <button onClick={handleSubmit}>➤</button>
+      </div>
     </div>
   );
 };
